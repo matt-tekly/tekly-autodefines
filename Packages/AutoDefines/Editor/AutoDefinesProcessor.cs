@@ -34,6 +34,7 @@ namespace Tekly.AutoDefines
 		static AutoDefinesProcessor()
 		{
 			CompilationPipeline.compilationStarted += OnCompilationStarted;
+			BuildCscFile();
 		}
 		
 		[MenuItem("Tools/Tekly/Build Auto Defines")]
@@ -45,8 +46,6 @@ namespace Tekly.AutoDefines
 				return;
 			}
 
-			var warningsAsErrors = autoDefines.Any(autoDefine => autoDefine.WarningsAsErrors);
-
 			var defines = autoDefines.SelectMany(autoDefine => autoDefine.Defines)
 				.Where(x => x.Enabled)
 				.Select(x => x.Define)
@@ -57,13 +56,23 @@ namespace Tekly.AutoDefines
 				content.AppendLine("-define:" + string.Join(";", defines));	
 			}
 			
+			var warningsAsErrors = autoDefines.Any(autoDefine => autoDefine.WarningsAsErrors);
 			if (warningsAsErrors) {
 				content.AppendLine(WARNINGS_AS_ERRORS);
 			}
 			
-			File.WriteAllText(CSC_FILE, content.ToString());
-			AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
-		
+			var originalCscFile = string.Empty;
+
+			if (File.Exists(CSC_FILE)) {
+				originalCscFile = File.ReadAllText(CSC_FILE);
+			}
+
+			var newCscFile = content.ToString();
+
+			if (newCscFile != originalCscFile) {
+				File.WriteAllText(CSC_FILE, newCscFile);
+				AssetDatabase.Refresh(ImportAssetOptions.Default);	
+			}
 		}
 		
 		private static void OnCompilationStarted(object context)
