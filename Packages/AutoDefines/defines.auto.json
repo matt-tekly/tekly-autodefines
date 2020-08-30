@@ -1,0 +1,9 @@
+﻿{
+    "WarningsAsErrors": true,
+    "Defines": [
+        {
+            "Define": "TEKLY_AUTO_DEFINES",
+            "Enabled": true
+        }
+    ]
+}

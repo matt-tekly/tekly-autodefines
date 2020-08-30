@@ -1,0 +1,11 @@
+{
+    "name": "ca.tekly.autodefines",
+    "version": "1.0.0",
+    "displayName": "Tekly Auto Defines",
+    "description": "Automatically create a csc.rsp with defines from different packages",
+    "unity": "2019.1",
+    "author": {
+        "name": "Matt King",
+        "email": "matt@tekly.ca"
+    }
+}
